@@ -1,24 +1,34 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './components/Home';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import CGPACalculator from './components/CGPACalculator';
+
 import './App.css';
 
 function App() {
+  const isLoggedIn = !!localStorage.getItem('token');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <div className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={isLoggedIn ? <Navigate to="/calculator" /> : <Login />} />
+          <Route path="/signup" element={isLoggedIn ? <Navigate to="/calculator" /> : <Signup />} />
+          <Route
+            path="/calculator"
+            element={isLoggedIn ? <CGPACalculator /> : <Navigate to="/login" />}
+          />
+        </Routes>
+      </div>
+      <Footer />
+    </Router>
   );
 }
 
